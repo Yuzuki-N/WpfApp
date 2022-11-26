@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,20 +22,33 @@ namespace WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private SqlConnection sqlConnection;
+
         public MainWindow()
         {
             InitializeComponent();
-            var grid = this.Content as Grid;
-            Button button = new Button();
-            button.Height = 50;
-            button.Width = 100;
-            Margin = new Thickness(0, 0, 700, 385);
-            //button.Margin = Margin;
-            button.Content = "Button !!!";
-            grid.Children.Add(button);
+            string connectionStr = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=master;Integrated Security=True;TrustServerCertificate=true";
+            sqlConnection = new SqlConnection(connectionStr);
+            showCustomers();
         }
 
-        private void TextBox_TextChanged()
+        private void showCustomers()
+        {
+            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter
+                ("select * from Customers", sqlConnection);
+
+            using (sqlDataAdapter)
+            {
+                DataTable customerTable = new DataTable();
+                sqlDataAdapter.Fill(customerTable);
+
+                customerList.DisplayMemberPath = "Name";
+                customerList.SelectedValuePath = "Id";
+                customerList.ItemsSource = customerTable.DefaultView;
+            }
+        }
+
+        private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
         }
     }

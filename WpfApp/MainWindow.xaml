@@ -7,5 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Label Content="客户列表" HorizontalAlignment="Left" Margin="30,36,0,0" VerticalAlignment="Top" Height="38" Width="89" />
+        <ListBox Name="customerList" Margin="30,79,555,131" SelectionChanged="CustomerList_SelectionChanged" />
     </Grid>
 </Window>
