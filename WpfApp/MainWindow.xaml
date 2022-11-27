@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Label Content="客户列表" HorizontalAlignment="Left" Margin="30,36,0,0" VerticalAlignment="Top" Height="38" Width="89" />
-        <ListBox Name="customerList" Margin="30,79,555,131" SelectionChanged="CustomerList_SelectionChanged" />
+        <Label Content="客户列表" HorizontalAlignment="Left" Margin="93,62,0,0" VerticalAlignment="Top" Height="38" Width="89" />
+        <ListBox Name="customerList" Margin="93,105,492,105" SelectionChanged="CustomerList_SelectionChanged" />
+        <Label Content="预约记录" HorizontalAlignment="Left" Margin="448,61,0,0" VerticalAlignment="Top" Height="39" Width="72" />
+        <ListBox Name="appointmentList"  Margin="448,105,122,105" />
     </Grid>
 </Window>

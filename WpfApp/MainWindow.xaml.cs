@@ -34,21 +34,60 @@ namespace WpfApp
 
         private void showCustomers()
         {
-            SqlDataAdapter sqlDataAdapter = new SqlDataAdapter
-                ("select * from Customers", sqlConnection);
-
-            using (sqlDataAdapter)
+            try
             {
-                DataTable customerTable = new DataTable();
-                sqlDataAdapter.Fill(customerTable);
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter
+                    ("select * from Customers", sqlConnection);
 
-                customerList.DisplayMemberPath = "Name";
-                customerList.SelectedValuePath = "Id";
-                customerList.ItemsSource = customerTable.DefaultView;
+                using (sqlDataAdapter)
+                {
+                    DataTable customerTable = new DataTable();
+                    sqlDataAdapter.Fill(customerTable);
+
+                    customerList.DisplayMemberPath = "Name";
+                    customerList.SelectedValuePath = "Id";
+                    customerList.ItemsSource = customerTable.DefaultView;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
 
         private void CustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                string query = "select * from Appointments join Customers " +
+                    "on Appointments.CustomerId = Customers.Id " +
+                    "where Customers.Id = @CustomerId";
+
+                var CustomerId = customerList.SelectedValue;
+
+                // 为了处理@CustomerId
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@CustomerId", CustomerId);
+
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCommand);
+
+                using (sqlDataAdapter)
+                {
+                    DataTable appointmentTable = new DataTable();
+                    sqlDataAdapter.Fill(appointmentTable);
+
+                    appointmentList.DisplayMemberPath = "Time";
+                    appointmentList.SelectedValuePath = "Id";
+                    appointmentList.ItemsSource = appointmentTable.DefaultView;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ListBox_SelectionChanged()
         {
         }
     }
